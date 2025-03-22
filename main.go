@@ -6,13 +6,12 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"playsee.co/interview/api/middleware"
 )
-
-const APIKey = "qwerklj1230dsa350123l2k1j4kl1j24"
 
 func handleRequests() {
 	router := mux.NewRouter().StrictSlash(true)
-	router.Use(apiKeyAuthMiddleware)
+	router.Use(middleware.ApiKeyAuthMiddleware)
 	router.HandleFunc("/test-1", Test1).Methods("POST")
 
 	port := 8082
@@ -21,17 +20,6 @@ func handleRequests() {
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-func apiKeyAuthMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		apiKey := r.Header.Get("api-key")
-		if apiKey != APIKey {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
-			return
-		}
-		next.ServeHTTP(w, r)
-	})
 }
 
 func main() {
