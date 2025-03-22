@@ -18,8 +18,13 @@
    - 可由新到舊且由舊到新查找
    - 依照NoSQL DB特性，避免hotspot產生
 
+以Cassandra為例, 用PRIMARY KEY ((user_id), created_at, post_id)
+讓不同user存在不同node, 避免hotspot, 同時用created_at作排序, 並加上post_id讓同一時間可以有多筆post_id
+
 ## 問題B
 設計一個NoSQL DB的rowkey，並說明設計原因，滿足
    - 在某個latlngbounds時，能快速找出結果
    - 依照NoSQL DB特性，避免hotspot產生
    
+以Cassandra為例, 用PRIMARY KEY ((lat))
+讓不同lat存在不同node, 避免hotspot, 當要拿單一lat裡的所有資料時, 可以在同一個node拿到, 速度會比較快
